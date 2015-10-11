@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+# importing libraries
+import pandas
+import numpy
+
+#importing data
+data = pandas.read_csv("gapminder.csv", low_memory=False)
+
+# converting urban rate to numeric variable
+data['urbanrate'] = data['urbanrate'].convert_objects(convert_numeric=True)
+data['lifeexpectancy'] = data['lifeexpectancy'].convert_objects(convert_numeric=True)
+
+# Generating basic summary statistics
+urbanization_description = data['urbanrate'].describe()
+life_expectancy_description = data['lifeexpectancy'].describe()
+
+#getting decile wise frequency
+urbanrate_deciles = numpy.histogram(data['urbanrate'], bins=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+lifeexpectancy_deciles = numpy.histogram(data['lifeexpectancy'], bins=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+print('Summary statistics for rate of urbanization')
+print(urbanization_description)
+
+print('Urbanization Rates Grouped by Decile')
+print(urbanrate_deciles)
+
+print('Summary Statistics for Life Expectancy')
+print(life_expectancy_description)
+
+print('Life Expectancy Grouped by Decile')
+print(lifeexpectancy_deciles)
+
+#Separating Largest segment to check for trends
+sub1=data[(data['lifeexpectancy']>=70) & (data['lifeexpectancy']<80)]
+urbanrate_sub1 = numpy.histogram(sub1['urbanrate'], bins=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+print('Urbanization Rates for Countries with Life Expectancy Between 70 and 80 Years')
+print(urbanrate_sub1)
+
+sub2=data[(data['lifeexpectancy']>=73)]
+sub3=data[(data['lifeexpectancy']<73)]
+
+urbanrate_sub2 = numpy.histogram(sub2['urbanrate'], bins=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+urbanrate_sub3 = numpy.histogram(sub3['urbanrate'], bins=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+print('Urbanization Rates for Countries with Life Expectancy Above 73 Years')
+print(urbanrate_sub2)
+
+print('Urbanization Rates for Countries with Life Expectancy Below 73 Years')
+print(urbanrate_sub3)
+
